@@ -24,22 +24,22 @@ if [[ REPO_ANSWER -eq "yes" ]]; then
             echo "Script ended! you need to install gh to set up a github repos"
             exit 1
         fi
-    else
-        echo "To sett up github repos you need to first login to github!"
-        gh auth login
-        if [[ $? -eq 0 ]]; then
-            echo "Created github repo for $NAME"
-            gh repo create $NAME --public
-        else
-            echo "You could not be logged in!"
-            exit 1
-        fi 
     fi
+    echo "To sett up github repos you need to first login to github!"
+    gh auth login
+    if [[ $? -eq 0 ]]; then
+        echo "Created github repo for $NAME"
+        gh repo create $NAME --public
+    else
+        echo "You could not be logged in!"
+        exit 1
+    fi 
 fi
 
 echo "What kind of projekt do you want to set up? (express|symfony)"
 read TYPE
 if [[ TYPE -eq "express" ]]; then
+    mkdir $NAME
     cd ./$NAME
     echo "Setting up node/express envirement!"
     dpkg -s nodejs &> /dev/null
@@ -51,11 +51,12 @@ if [[ TYPE -eq "express" ]]; then
             echo "Installing nodejs ..."
             apt install nodejs
         else
-            echo "Need nodejs script terminated"
+            echo "Need nodejs! script terminated! ):"
             exit 1
         fi 
     fi
 
+    npm init -y
     echo "Installing express ..."
     npm install express
 
